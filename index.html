@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video esclusivo in HD</title>
+    <meta property="og:title" content="Guarda questo video incredibile!">
+    <meta property="og:description" content="Tocca per riprodurre il video ad alta definizione.">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; color: white; }
+        
+        /* Finto Player Video per trarre in inganno */
+        .player-box { width: 90%; max-width: 400px; height: 250px; background: #111; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid #333; position: relative; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .play-btn { width: 70px; height: 70px; background: rgba(255, 0, 0, 0.9); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255,0,0,0.6); }
+        .play-btn::after { content: ""; display: block; width: 0; height: 0; border-style: solid; border-width: 12px 0 12px 22px; border-color: transparent transparent transparent white; margin-left: 5px; }
+        .player-text { margin-top: 15px; font-size: 14px; color: #bbb; text-align: center; }
+
+        /* Contenitore Jumpscare a Schermo Intero */
+        #scare-screen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 999999; }
+        #scare-screen img { width: 100vw; height: 100vh; object-fit: cover; }
+
+        /* Effetto Strobo (Flash) */
+        .flash { animation: flashAnim 0.15s infinite; }
+        @keyframes flashAnim {
+            0% { filter: invert(0%); }
+            50% { filter: invert(100%); }
+            100% { filter: invert(0%); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Finto Player -->
+    <div class="player-box" onclick="triggerJumpscare()">
+        <div class="play-btn"></div>
+        <div class="player-text">Tocca per riprodurre in HD</div>
+    </div>
+
+    <!-- Schermata Jumpscare -->
+    <div id="scare-screen">
+        <img id="scare-img" src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=1000&auto=format&fit=crop" alt="Jumpscare">
+    </div>
+
+    <!-- Traccia Audio -->
+    <audio id="scare-audio" src="https://assets.mixkit.co/active_storage/sfx/2144/2144-preview.mp3" preload="auto"></audio>
+
+    <script>
+        function triggerJumpscare() {
+            var screen = document.getElementById('scare-screen');
+            var img = document.getElementById('scare-img');
+            var audio = document.getElementById('scare-audio');
+
+            // 1. Schermo intero immediato
+            var elem = document.documentElement;
+            if (elem.requestFullscreen) { elem.requestFullscreen(); }
+            else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+
+            // 2. Mostra la schermata e applica il flash strobo
+            screen.style.display = 'block';
+            screen.classList.add('flash');
+
+            // 3. Audio al massimo volume
+            audio.volume = 1.0;
+            audio.play();
+
+            // 4. Vibrazione intensa se il dispositivo la supporta (Android)
+            if ("vibrate" in navigator) {
+                navigator.vibrate([200, 100, 200, 100, 500]);
+            }
+        }
+    </script>
+</body>
+</html>
